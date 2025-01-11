@@ -1,0 +1,106 @@
+import axios from "axios";
+
+//GET DATA
+export const FETCH_DATA_REQUEST = "FETCH_DATA_REQUEST";
+export const FETCH_DATA_SUCCESS = "FETCH_DATA_SUCCESS";
+export const FETCH_DATA_FAILURE = "FETCH_DATA_FAILURE";
+
+//DELETE DATA
+export const DELETE_DATA_REQUEST = "DELETE_DATA_REQUEST";
+export const DELETE_DATA_SUCCESS = "DELETE_DATA_SUCCESS";
+export const DELETE_DATA_FALIURE = "DELETE_DATA_FALIURE";
+
+//POST DATA
+export const POST_DATA_REQUEST = "POST_DATA_REQUEST";
+export const POST_DATA_SUCCESS = "POST_DATA_SUCCESS";
+export const POST_DATA_FALIURE = "POST_DATA_FALIURE";
+
+//PAGENATION
+export const FETCH_POST_PAGINATION = "FETCH_POST_PAGINATION";
+
+// MIDDLEWARE FOR APICALL
+export const fetch = () =>({
+  apicall:{
+    url:"https://jsonplaceholder.typicode.com/posts",
+    onStart:"DATA_REQUEST",
+    onSuccess:"DATA_SUCCESS",
+    onFailure:"DATA_FAILURE"
+  }
+})
+
+//FETCHDATA FUNCTIONALITY
+export const fetchData = (page = 1, limit = 10) => {
+  return async (dispatch) => {
+    dispatch({ type: FETCH_DATA_REQUEST });
+    try {
+      const response = await axios.get(
+        `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${limit}`
+      );
+      dispatch({ type: FETCH_DATA_SUCCESS, payload: response.data });
+    } catch (error) {
+      dispatch({ type: FETCH_DATA_FAILURE, error: error.message });
+    }
+  };
+};
+
+//DELETE DATA FUNCTIONALITY
+export const deleteData = (id) => {
+  return async (dispatch) => {
+    dispatch({ type: DELETE_DATA_REQUEST });
+    try {
+      const response = await axios.delete(
+        `https://jsonplaceholder.typicode.com/posts/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      console.log(response);
+      dispatch({ type: DELETE_DATA_SUCCESS, payload: response.data });
+    } catch (error) {
+      dispatch({ type: DELETE_DATA_FALIURE, error: error.message });
+    }
+  };
+};
+
+//POST DATA FUNCTIONLATY
+
+export const postData = (data) => {
+  return async (dispatch) => {
+    dispatch({ type: POST_DATA_REQUEST });
+    try {
+      const response = await axios.post(
+        `https://jsonplaceholder.typicode.com/posts`,
+        {
+          userId: data.userId,
+          title: data.title,
+          body: data.body,
+        }
+      );
+
+      console.log(response);
+      dispatch({ type: POST_DATA_SUCCESS, payload: response.data });
+    } catch (error) {
+      dispatch({ type: POST_DATA_FALIURE, error: error.message });
+    }
+  };
+};
+
+//MIDDLEWARE FETCH FUNCTIONLATY
+
+export const dataFetch = (store) => (next) => async(action) =>{
+  if(!action.apicall){
+    return next(action)
+  }
+  const {url, onStart, onSuccess, onFailure} = action.apicall;
+
+  if(onStart) store.dispatch({type: onStart})
+
+  try {
+    const response = await axios.get(url);
+    console.log(response.data);
+    store.dispatch({type: onSuccess, payload: response.data})
+  } catch (error) {
+    store.dispatch({type: onFailure, error: error.message})
+
+  }
+}
