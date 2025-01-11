@@ -8,6 +8,9 @@ import {
   POST_DATA_FALIURE,
   POST_DATA_REQUEST,
   POST_DATA_SUCCESS,
+  PUT_DATA_FALIURE,
+  PUT_DATA_REQUEST,
+  PUT_DATA_SUCCESS,
 } from "./Action";
 
 const initialState = {
@@ -40,6 +43,12 @@ export const postReducer = (state = initialState, action) => {
       return {...state, loading: false, posts: [...state.posts, action.payload]}
       case POST_DATA_FALIURE:
         return {...state, loading: false, error: action.error}
+      case PUT_DATA_REQUEST:
+        return{...state,loading: true}
+      case PUT_DATA_SUCCESS:
+        return { ...state, loading: false, posts: action.payload, error: null };
+        case PUT_DATA_FALIURE:
+          return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }

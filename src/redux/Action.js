@@ -15,6 +15,11 @@ export const POST_DATA_REQUEST = "POST_DATA_REQUEST";
 export const POST_DATA_SUCCESS = "POST_DATA_SUCCESS";
 export const POST_DATA_FALIURE = "POST_DATA_FALIURE";
 
+//PUT DATA
+export const PUT_DATA_REQUEST = "PUT_DATA_REQUEST";
+export const PUT_DATA_SUCCESS = "PUT_DATA_SUCCESS";
+export const PUT_DATA_FALIURE = "PUT_DATA_FALIURE";
+
 //PAGENATION
 export const FETCH_POST_PAGINATION = "FETCH_POST_PAGINATION";
 
@@ -85,6 +90,21 @@ export const postData = (data) => {
   };
 };
 
+//PUT DATA FUNCTIONLATY
+
+export const updatePost = (postId, updatedData) => async (dispatch) => {
+  dispatch({ type: PUT_DATA_REQUEST });
+  try {
+    const response = await axios.put(
+      `https://jsonplaceholder.typicode.com/posts/${postId}`,
+      updatedData
+    );
+    dispatch({type: PUT_DATA_SUCCESS, payload: response.data});
+  } catch (error) {
+    dispatch({type : PUT_DATA_FALIURE, error: error.message});
+  }
+};
+
 //MIDDLEWARE FETCH FUNCTIONLATY
 
 export const dataFetch = (store) => (next) => async(action) =>{
@@ -104,3 +124,4 @@ export const dataFetch = (store) => (next) => async(action) =>{
 
   }
 }
+
