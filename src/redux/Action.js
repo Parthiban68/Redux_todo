@@ -21,7 +21,13 @@ export const PUT_DATA_SUCCESS = "PUT_DATA_SUCCESS";
 export const PUT_DATA_FALIURE = "PUT_DATA_FALIURE";
 
 //PAGENATION
-export const FETCH_POST_PAGINATION = "FETCH_POST_PAGINATION";
+export const CHANGE_PAGE = 'CHANGE_PAGE';
+
+//SEARCH 
+export const SERACH_ITEM = 'SEARCH_ITEM'
+
+//ROUTE TO NEXT PAGE 
+export const ROUTE_DATA = 'ROUTE_DATA'
 
 // MIDDLEWARE FOR APICALL
 export const fetch = () =>({
@@ -34,7 +40,7 @@ export const fetch = () =>({
 })
 
 //FETCHDATA FUNCTIONALITY
-export const fetchData = (page = 1, limit = 10) => {
+export const fetchData = (page = 1, limit = 12) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_DATA_REQUEST });
     try {
@@ -125,3 +131,22 @@ export const dataFetch = (store) => (next) => async(action) =>{
   }
 }
 
+//PAGENATION FUNCTIONALITY
+
+export const changePage = (page) => (dispatch) =>{
+  dispatch({type:CHANGE_PAGE, payload:page})
+}
+
+
+//SEACH FUNCTIONALITY
+
+export const searchItem = (item) => (dispatch) =>{
+  dispatch({type:SERACH_ITEM, payload:item})
+}
+
+//ROUTE FUNTIONALITY
+
+export const routeData = (data) =>(dispatch) =>{
+  dispatch({type:ROUTE_DATA, payload:data})
+
+}

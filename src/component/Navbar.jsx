@@ -11,7 +11,7 @@ const Navbar = () => {
         <ul className='flex justify-between items-center p-1 space-x-10'>
         {
           navlink.map((link)=>(
-            <li key={link.id} className='text-white font-semibold text-xl'>
+            <li key={link.id} className='text-white font-semibold text-lg'>
               <NavLink to={link.link}>{link.name}</NavLink>
               
             </li>
